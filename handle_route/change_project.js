@@ -3,11 +3,11 @@ const ProjectInfo = require("../db_manage/modles/project_info");
 // 分包单位
 const SubcontractingUnit = require("../db_manage/modles/subcontracting_unit");
 // 分包单位 项目 中间健
-const SubcontractingProjectMiddle = require("../db_manage/modles/subcontracting_project_middle");
+const SubcontractingProjectMiddle = require("../db_manage/modles/subcontracting_project_mapping");
 // 单位
 const Unit = require("../db_manage/modles/unit");
 const { exceptionSync, checkBodyParameter } = require('../utils/service_requst_util');
-const handleBody = async (req, res, next) => {
+const handleBody = async (req, res) => {
     var projectName = checkBodyParameter(req, 'projectName');
     var project = await ProjectInfo.findOne({ where: { projectName } });
     if (isEmpty(project)) return res.cc('该项目不存在-' + projectName);
@@ -53,5 +53,9 @@ function checkSubcontracting(subcontracting,projectId,) {
         
     }
 
+}
+
+function deleteSubcontracting(id,transaction){
+    SubcontractingProjectMiddle.destroy()
 }
 module.exports = (req, res, next) => exceptionSync(req, res, next, handleBody)

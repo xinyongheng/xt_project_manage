@@ -1,7 +1,7 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../db_application.js");
-class SubcontractingUnit extends Model { }
-SubcontractingUnit.init(
+class SubcontractingProjectMapping extends Model { }
+SubcontractingProjectMapping.init(
     {
         id: {
             field: 'id',
@@ -33,6 +33,12 @@ SubcontractingUnit.init(
             allowNull: false,
             comment: '单位id'
         },
+        subcontractingUnitId: {
+            field: 'subcontracting_unit_id',
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            comment: '分包单位id'
+        },
         projectId: {
             field: 'project_id',
             type: DataTypes.INTEGER,
@@ -48,8 +54,8 @@ SubcontractingUnit.init(
     },
     {
         sequelize,
-        comment: '分包单位',
-        tableName: 'subcontracting_unit'
+        comment: '分包单位中间健',
+        tableName: 'subcontracting_project_mapping'
     }
 );
-module.exports = SubcontractingUnit;
+module.exports = SubcontractingProjectMapping;

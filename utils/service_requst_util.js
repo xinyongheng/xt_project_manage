@@ -1,17 +1,33 @@
 const { isEmpty } = require("./str_util.js");
 const { rasDecryptionForJson } = require("./aes.js")
 const Base64 = require('js-base64');
+const sequelize = require("../db_manage/db_application.js");
 function checkSession(req, res) {
     /* var user = req.session.user
     if (!user) {
         throw new Error('认证错误');
     } */
 }
+
+async function transactionDb(res, fun) {
+    var transaction;
+    try {
+        transaction = await sequelize.transaction();
+        await fun(transaction);
+        await transaction.commit();
+    } catch (err) {
+        if (transaction) {
+            await transaction.rollback();
+        }
+        return res.cc(err);
+    }
+}
+
 async function exceptionSync(req, res, next, fun, checkSessionTag) {
     try {
         if (checkSessionTag) checkSession(req, res);
         req = rasDecryptionBody(req);
-        await fun(req, res, next);
+        await fun(req, res);
     } catch (error) {
         console.log(error);
         next(error);
@@ -21,7 +37,7 @@ async function exceptionSync(req, res, next, fun, checkSessionTag) {
 function exception(req, res, next, fun, checkSessionTag) {
     try {
         if (checkSessionTag) checkSession(req, res);
-        fun(rasDecryptionBody(req), res, next);
+        fun(rasDecryptionBody(req), res);
     } catch (error) {
         console.log('----------------');
         console.log(error);
@@ -53,4 +69,4 @@ function rasDecryptionBody(req) {
 function loadToken(req) {
     return req.headers['authorization'];
 }
-module.exports = { exceptionSync, exception, checkBodyParameter, loadToken }
+module.exports = { exceptionSync, exception, transactionDb, checkBodyParameter, loadToken }
