@@ -65,9 +65,8 @@ module.exports = (req, res, next) => exceptionSync(req, res, next, async (req, r
             });
             await WinningUnit.bulkCreate(winningUnits, { transaction });
         }
+        res.ss(project);
     });
-    project = await ProjectInfo.create(project);
-    res.ss(project);
 });
 
 /**

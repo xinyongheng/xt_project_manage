@@ -19,7 +19,7 @@ async function transactionDb(res, fun) {
         if (transaction) {
             await transaction.rollback();
         }
-        return res.cc(err);
+        throw err;
     }
 }
 
