@@ -1,5 +1,4 @@
 const { isEmpty } = require("../utils/str_util")
-const { ServiceError } = require('../modle/error.js');
 module.exports = (err, req, res, next) => {
     console.log("22222222");
     console.log(err);

@@ -17,12 +17,19 @@ const handleBody = async (req, res) => {
     var project = await ProjectInfo.findOne({ where: { projectName } });
     if (isEmpty(project)) return res.cc('该项目不存在-' + projectName);
     var body = req.body;
+    // 检测项目内容是否有改变
     var projectChangeTag =
+        // 年份
         bodyParameter(body, project, 'year') ||
+        // 项目概述
         bodyParameter(body, project, 'content') ||
+        // 合同金额
         bodyParameter(body, project, 'contractAmount') ||
+        // 审定金额
         bodyParameter(body, project, 'approvedAmount') ||
+        // 已回款金额
         bodyParameter(body, project, 'repaidAmount') ||
+        // 备注
         bodyParameter(body, project, 'remark');
     try {
         var projectId = project.id;
